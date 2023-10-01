@@ -1,0 +1,19 @@
+# Node
+node_modules/
+build/
+npm-debug.log*
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Uploaded images
+backend/*.jpg
+backend/*.png
+
+# Editors
+.vscode/
+.idea/
+.DS_Store
