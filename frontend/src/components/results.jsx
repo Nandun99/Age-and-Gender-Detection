@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import LoadingSpinner from "./spinnerLoading";
+import Feedback from "./feedback";
 
 import smile from "./images/smiley.jpg";
 import sad from "./images/sad.jpg";
@@ -134,6 +135,13 @@ class Results extends Component {
                     </div>
                   </dl>
                 </div>
+
+                <Feedback
+                  key="4"
+                  predictAge1={this.props.predictAge1}
+                  predictGender={this.props.predictGender}
+                  image={this.props.image}
+                />
               </div>
             );
           }
