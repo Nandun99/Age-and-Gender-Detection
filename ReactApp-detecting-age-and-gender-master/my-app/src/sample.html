@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/dist/output.css" rel="stylesheet" />
+    <title>Age and Gender Prediction App</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="min-h-full">
+      <header class="bg-slate-700 shadow">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <h1 class="text-3xl font-bold text-white">
+            Age and Gender Detection App
+          </h1>
+        </div>
+      </header>
+      <main>
+        <div
+          class="
+            max-w-7xl
+            mx-auto
+            py-6
+            grid
+            md:grid-cols-3
+            gap-3
+            sm:grid-cols-1
+          "
+        >
+          <div class="px-1 py-6 sm:px-0">
+            <div
+              id="imagePreview"
+              class="
+                h-96
+                border-4 border-dashed border-gray-200
+                rounded-lg
+                px-3
+                sm:min-w-full
+                my-2
+              "
+            ></div>
+            <div class="mt-5 flex content-center justify-center">
+              <span class="hidden sm:block">
+                <form
+                  id="upload-file"
+                  method="post"
+                  enctype="multipart/form-data"
+                >
+                  <label
+                    for="imageUpload"
+                    class="
+                      inline-flex
+                      items-center
+                      px-4
+                      py-2
+                      border border-gray-300
+                      rounded-md
+                      shadow-sm
+                      text-sm
+                      font-medium
+                      text-gray-700
+                      bg-white
+                      hover:bg-gray-50
+                      focus:outline-none
+                      focus:ring-2
+                      focus:ring-offset-2
+                      focus:ring-indigo-500
+                    "
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="-ml-1 mr-2 h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    Upload
+                  </label>
+                  <input
+                    type="file"
+                    name="file"
+                    id="imageUpload"
+                    class="hidden"
+                    accept=".png, .jpg, .jpeg"
+                  />
+                </form>
+              </span>
+
+              <span class="hidden sm:block ml-3">
+                <button
+                  type="button"
+                  id="use_webcam"
+                  class="
+                    inline-flex
+                    items-center
+                    px-4
+                    py-2
+                    border border-gray-300
+                    rounded-md
+                    shadow-sm
+                    text-sm
+                    font-medium
+                    text-gray-700
+                    bg-white
+                    hover:bg-gray-50
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-offset-2
+                    focus:ring-indigo-500
+                  "
+                >
+                  <!-- Heroicon name: solid/link -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="-ml-1 mr-2 h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                  Use Webcam
+                </button>
+              </span>
+
+              <span class="hidden sm:block ml-3">
+                <button
+                  id="take_snap"
+                  type="button"
+                  class="
+                    inline-flex
+                    items-center
+                    px-4
+                    py-2
+                    border border-gray-300
+                    rounded-md
+                    shadow-sm
+                    text-sm
+                    font-medium
+                    text-white
+                    bg-red-500
+                    hover:bg-red-300
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-offset-2
+                    focus:ring-indigo-500
+                  "
+                >
+                  <!-- Heroicon name: solid/link -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="-ml-1 mr-2 h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                  Take Photo
+                </button>
+              </span>
+            </div>
+
+            <div class="mt-3 flex content-center justify-center">
+              <span class="hidden sm:block mr-10">
+                <button
+                  type="button"
+                  id="submit_btn_cam"
+                  class="
+                    inline-flex
+                    items-center
+                    px-6
+                    py-2
+                    border border-transparent
+                    rounded-md
+                    shadow-sm
+                    text-sm
+                    font-medium
+                    text-white
+                    bg-indigo-600
+                    hover:bg-indigo-700
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-offset-2
+                    focus:ring-indigo-500
+                  "
+                >
+                  <!-- Heroicon name: solid/check -->
+                  <svg
+                    class="-ml-1 mr-2 h-5 w-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Submit
+                </button>
+              </span>
+            </div>
+          </div>
+          <div class="px-4 py-6 sm:px-0 md:col-start-2 md:col-span-2">
+            <div class="bg-amber-300 shadow overflow-hidden sm:rounded-lg">
+              <div class="px-4 py-5 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                  Prediction Results
+                </h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                  Predicted Age and Gender.
+                </p>
+              </div>
+
+              <div class="border-t border-gray-200" id="wait-section">
+                <div
+                  class="
+                    flex flex-col
+                    items-center
+                    justify-center
+                    space-x-2
+                    bg-white
+                  "
+                  style="height: 440px"
+                >
+                  <h6
+                    class="
+                      font-medium
+                      leading-tight
+                      text-base
+                      mt-0
+                      mb-2
+                      text-blue-600
+                    "
+                  >
+                    Waiting for an Image upload...
+                  </h6>
+                  <div>
+                    <div
+                      style="border-top-color: transparent"
+                      class="
+                        w-16
+                        h-16
+                        border-4 border-blue-400 border-solid
+                        rounded-full
+                        animate-spin
+                      "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border-t border-gray-200" id="res-section">
+                <dl>
+                  <div
+                    class="
+                      bg-gray-50
+                      px-4
+                      py-5
+                      sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6
+                    "
+                  >
+                    <dt class="text-sm font-medium text-gray-500">
+                      Predicted Gender
+                    </dt>
+                    <dd
+                      class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                      id="gender-result"
+                    >
+                      Male
+                    </dd>
+                  </div>
+                  <div
+                    class="
+                      bg-white
+                      px-4
+                      py-5
+                      sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6
+                    "
+                  >
+                    <dt class="text-sm font-medium text-gray-500">
+                      Predicted Age
+                    </dt>
+                    <dd
+                      class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                      id="age-result"
+                    >
+                      49 Years
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+
+            <!-- Feedback Section -->
+            <div
+              class="shadow overflow-hidden sm:rounded-lg my-3"
+              id="feedback"
+            >
+              <div class="bg-slate-500 px-4 py-5 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-white">
+                  Submit Feedback
+                </h3>
+                <p class="mt-1 max-w-2xl text-sm text-white">
+                  Send feedback to compare results
+                </p>
+              </div>
+
+              <dl>
+                <div
+                  class="
+                    bg-gray-700
+                    px-4
+                    py-5
+                    sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6
+                  "
+                >
+                  <dt class="text-sm font-medium text-gray-500">
+                    <label
+                      for="email-address"
+                      class="block text-sm font-medium text-white"
+                      >Actual Age</label
+                    >
+                  </dt>
+                  <dd class="sm:mt-0 sm:col-span-2">
+                    <input
+                      type="text"
+                      name="email-address"
+                      id="email-address"
+                      autocomplete="email"
+                      class="
+                        focus:ring-indigo-500 focus:border-indigo-500
+                        block
+                        w-full
+                        p-2
+                        shadow-sm
+                        sm:text-sm
+                        border-gray-300
+                        rounded-md
+                      "
+                    />
+                  </dd>
+                </div>
+
+                <div
+                  class="
+                    bg-gray-700
+                    px-4
+                    py-5
+                    sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6
+                  "
+                >
+                  <dt class="text-sm font-medium text-gray-500">
+                    <label
+                      for="email-address"
+                      class="block text-sm font-medium text-white"
+                      >Actual Gender</label
+                    >
+                  </dt>
+                  <dd class="sm:mt-0 sm:col-span-2">
+                    <input
+                      type="text"
+                      name="email-address"
+                      id="email-address"
+                      autocomplete="email"
+                      class="
+                        focus:ring-indigo-500 focus:border-indigo-500
+                        block
+                        w-full
+                        p-2
+                        shadow-sm
+                        sm:text-sm
+                        border-gray-300
+                        rounded-md
+                      "
+                    />
+                  </dd>
+                </div>
+
+                <div
+                  class="
+                    bg-gray-700
+                    px-4
+                    py-5
+                    sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6
+                  "
+                >
+                  <dt class="text-sm font-medium text-gray-500">
+                    <div class="flex items-start">
+                      <div class="flex items-center h-5">
+                        <input
+                          id="comments"
+                          name="comments"
+                          type="checkbox"
+                          class="
+                            focus:ring-indigo-500
+                            h-4
+                            w-4
+                            text-indigo-600
+                            border-gray-300
+                            rounded
+                          "
+                        />
+                      </div>
+                      <div class="ml-3 text-sm">
+                        <label for="comments" class="font-medium text-white"
+                          >Save Image</label
+                        >
+                        <p class="text-gray-500">
+                          Give Permission to save photo in Database
+                        </p>
+                      </div>
+                    </div>
+                  </dt>
+                  <dd class="sm:mt-0 sm:col-span-2"></dd>
+                </div>
+
+                <div
+                  class="
+                    bg-gray-700
+                    px-4
+                    py-5
+                    sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6
+                  "
+                >
+                  <dt class="text-sm font-medium text-gray-500">
+                    <button
+                      type="submit"
+                      id="submit_feed"
+                      class="
+                        inline-flex
+                        justify-center
+                        py-2
+                        px-4
+                        border border-transparent
+                        shadow-sm
+                        text-sm
+                        font-medium
+                        rounded-md
+                        text-white
+                        bg-indigo-600
+                        hover:bg-indigo-700
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-offset-2
+                        focus:ring-indigo-500
+                      "
+                    >
+                      Submit Feedback
+                    </button>
+                  </dt>
+                  <dd class="sm:mt-0 sm:col-span-2"></dd>
+                </div>
+              </dl>
+            </div>
+
+            <!-- Alert -->
+            <div
+              class="
+                bg-green-100
+                rounded-lg
+                py-5
+                px-6
+                mb-3
+                my-3
+                text-base text-green-700
+                inline-flex
+                items-center
+                w-full
+              "
+              role="alert"
+              id="sucess_alert"
+            >
+              <svg
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="fas"
+                data-icon="check-circle"
+                class="w-4 h-4 mr-2 fill-current"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"
+                ></path>
+              </svg>
+              Feedback Sucessfully Submitted
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
+  </body>
+</html>
